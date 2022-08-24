@@ -47,7 +47,7 @@ df_no_missing['thal'].unique()
 # first step in classification tree : split data into columns used
 # to make classification and column that we want to predict 
 # in this case hd column (heart disease) is what we want to predict
-# NOW, make new copy of columns used to make prediction
+# Now, make new copy of columns used to make prediction
 X = df_no_missing.drop('hd', axis=1).copy()
 X.head()
 
@@ -55,22 +55,18 @@ X.head()
 y = df_no_missing['hd'].copy()
 y.head()
 
-# one-hot encoding : in order to use categorical data with scikit learn decision trees 
- # we have to convert categorical data into columns of binary values 
- # Categorical Data is the data that generally takes a limited number of possible values. 
- # Also, the data in the category need not be numerical, it can be textual in nature.
- X.dtypes
+
+X.dtypes
 
 X['cp'].unique()
 
-# so cp contains values 1,2,3,4 we will convert it using one hot coding 
+# cp contains values 1,2,3,4 we will convert it using one hot coding 
 # into series of columns that contain only 0s and 1s
-# here we're using getdummies from pandas u can also use 
-# ColumnTransformer() method from Scikit-learn library
+# here we're using getdummies function from pandas 
 pd.get_dummies(X,columns=['cp']).head()
 #now cp column got converted into 4 rows - each for 1 value - 1,2,3,4
 
-#now that we have seen how get dummies works we will use it on all the 4 columns
+# using getdummies on all the four columns
 # that have such values and save it
 X_encoded = pd.get_dummies(X,columns=['cp',
                                      'restecg',
@@ -80,7 +76,7 @@ X_encoded.head()
 
 # since sex, fbs, exang only have two categories and is already 0s and 1s no change is required 
 # column w more than two categories (like cp) gets seperated into multiple columns of 0s and 1s
-# now if u want, to check if a column is unique
+# to check if a column is unique
 X_encoded['sex'].unique()
 
 # predicting value - heart disease in this has 0 - no hd and 1-4 levels of hd
@@ -114,7 +110,7 @@ plot_confusion_matrix(clf_dt,X_test,y_test,display_labels=["Does not have HD","H
 # now looking at this confusion matrix we see that
 # 74% no hd and 79% hd has been correctly classified 
 # to do better than this we can prune the data set
-# cuz overfitting could be holding back this prediction
+# because overfitting could be holding back this prediction
 
 # cost complexity pruning (ccp)
 path = clf_dt.cost_complexity_pruning_path(X_train,y_train) # determine values for alpha
@@ -123,13 +119,13 @@ ccp_alphas = ccp_alphas[:-1] # exclude the maximum value for alpha(since max val
 
 clf_dts = [] # create an array that we will put decision trees into
 
-# now create one decision tree per vslue of alpha and store it in the array 
+# create one decision tree per value of alpha and store it in the array 
 for ccp_alpha in ccp_alphas: # for i in ccp_alphas
   clf_dt = DecisionTreeClassifier(random_state=0, ccp_alpha=ccp_alpha)
   clf_dt.fit(X_train,y_train)
   clf_dts.append(clf_dt)
 
-# now lets graph the accuracy of the trees using the training dataset and the testing dataset 
+# graph the accuracy of the trees using the training dataset and the testing dataset 
 # as a function of alpha
 train_scores = [clf_dt.score(X_train,y_train) for clf_dt in clf_dts]
 test_scores = [clf_dt.score(X_test,y_test) for clf_dt in clf_dts]
@@ -151,12 +147,11 @@ clf_dt = DecisionTreeClassifier(random_state=42, ccp_alpha=0.016) # create the t
 
 # now use 5-fold cross validation create 5 different training and testing datasets that
 # are then used to train and test the tree
-# note : we use 5 - fold because we dont have tons of data
+# use 5 - fold because we dont have tons of data
 scores = cross_val_score(clf_dt,X_train,y_train,cv=5)
 df = pd.DataFrame(data={'tree' : range(5), 'accuracy': scores})
 
 df.plot(x='tree', y='accuracy', marker = 'o', linestyle = '--')
-#here it shows ...
 
 # create an array to store the results of each fold during cross validation
 alpha_loop_values = []
@@ -192,7 +187,7 @@ ideal_ccp_alpha = alpha_results[(alpha_results['alpha'] > 0.014)
                                 (alpha_results['alpha'] < 0.015)]['alpha']
 ideal_ccp_alpha
 
-# we need to convert ideal_ccp_alpha to float cuz python thinks that it is a series ( as 20 index is shown)
+# we need to convert ideal_ccp_alpha to float
 ideal_ccp_alpha=float(ideal_ccp_alpha)
 ideal_ccp_alpha
 
@@ -205,9 +200,9 @@ clf_dt_pruned = clf_dt_pruned.fit(X_train, y_train)
 # now lets do another confusion matrix to see if pruned tree does better 
 plot_confusion_matrix(clf_dt_pruned,X_test,y_test,display_labels=["Does not have HD","Has HD"])
 
-# yas its done better
+# this looks better
 # 81 % without hd and 85% with hd has been classified
-# now draw pruned tree
+# plot the pruned tree
 plt.figure(figsize=(15,7.5))
 plot_tree(clf_dt_pruned,
           filled=True,
@@ -215,6 +210,5 @@ plot_tree(clf_dt_pruned,
           class_names=["No HD", 'Yes HD'],
           feature_names = X_encoded.columns
           );
-# now this SMOL DECISION TREE DOES BETTERRR THAN THAT HOOGE ONE cuz that was overfitting the data
-# also the COLOURS of the boxes are acc to whoever has majority so all oranges have majority of no hd and bluish has majority hd
-# the darker the colour , the lower the gini impurity
+# the darker the colour of the boxes the lower is the gini impurity
+# we have made the decision tree much smaller than what we started with. This tree doesnt overfit the data like the previous one
