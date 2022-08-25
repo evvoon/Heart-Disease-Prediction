@@ -12,6 +12,7 @@ Steps followed:
 5) built a preliminary decision tree and then optimized it using cost complexity pruning (visualizing alpha, using cross validation to find best value of      alpha)
 6) interpreted and evaluated final classification tree
 
+![image](/FinaldecisionTree.png)
 interpreting the final decision tree:
 
 In each node, we have:
