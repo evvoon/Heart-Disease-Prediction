@@ -12,7 +12,15 @@ Steps followed:
 5) built a preliminary decision tree and then optimized it using cost complexity pruning (visualizing alpha, using cross validation to find best value of      alpha)
 6) interpreted and evaluated final classification tree
 
+what we started with:
+![image](/prevDecisionTree.png)
+
+
+
+tree after cleaning the data:
 ![image](/FinaldecisionTree.png)
+
+
 interpreting the final decision tree:
 
 In each node, we have:
@@ -28,4 +36,4 @@ patient has heart disease. The number of patients with No comes first because th
 
 The leaves are just like the nodes, except that they do not contain a variable and threshold for splitting the observations.
 
-Lastly, the nodes and leaves are colored by the class. In this case No is different shades of orarige-ish and Yes is different shades of blue. The the darker the shade, the lower the gini score, and that tells us how much the node or leaf is skewed towards one class.
+Lastly, the nodes and leaves are colored by the class. In this case No is different shades of orarige-ish and Yes is different shades of blue. The darker the shade, the lower the gini score, and that tells us how much the node or leaf is skewed towards one class.
