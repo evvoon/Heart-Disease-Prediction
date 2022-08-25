@@ -28,7 +28,9 @@ In each node, we have:
 The variable (column name) and the threshold for splitting the observations. For example, in the tree's root, we use **ca** to split the observations. All observations with **ca <= 0.5** go to the left and all observations with **ca> 0.5** go to the right.
 
 **gini** is the gini index or score for that node
+
 **samples** tell us how many samples are in that node
+
 **value** tells us how many samples in the node are in each category. In this example, we have two categories, No and Yes, referring to whether or not a
 patient has heart disease. The number of patients with No comes first because the categories are in alphabetical order. Thus, in the root, 118 patients have **No** and 104 patients have **Yes**.
 
